@@ -1,0 +1,64 @@
+name: Build Android App (Buildozer)
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Run your exact commands
+        run: |
+          set -e
+          export ANDROID_NDK_VERSION=25b
+
+          git clone https://github.com/Android-for-Python/camerax_provider.git
+          rm -rf camerax_provider/.git
+
+          pip install buildozer
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install cython==0.29.33
+          sudo apt-get install -y \
+              libgstreamer1.0 \
+              gstreamer1.0-plugins-base \
+              gstreamer1.0-plugins-good
+          sudo apt update
+          sudo apt install -y \
+            python3-pip openjdk-17-jdk zip unzip git \
+            autoconf automake libtool pkg-config m4 gettext autoconf-archive \
+            build-essential cmake \
+            libffi-dev libssl-dev \
+            zlib1g-dev libncurses5-dev libncursesw5-dev \
+            libtinfo5 libsqlite3-dev liblzma-dev
+          sudo apt-get install build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev libffi7
+          sudo apt-get install libffi-dev
+          sudo apt-get install -y \
+              python3-pip \
+              build-essential \
+              git \
+              python3 \
+              python3-dev \
+              ffmpeg \
+              libsdl2-dev \
+              libsdl2-image-dev \
+              libsdl2-mixer-dev \
+              libsdl2-ttf-dev \
+              libportmidi-dev \
+              libswscale-dev \
+              libavformat-dev \
+              libavcodec-dev \
+              zlib1g-dev
+          git clone https://github.com/Android-for-Python/camerax_provider.git
+          rm -rf camerax_provider/.git
+
+          yes | buildozer -v android debug
